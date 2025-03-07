@@ -1,0 +1,7 @@
+{
+  "name": "swapi-fullstack",
+  "private": true,
+  "workspaces": [
+    "projects/*"
+  ]
+}
