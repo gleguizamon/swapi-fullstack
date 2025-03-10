@@ -10,9 +10,9 @@ import { useState } from "react";
 
 const categories = [
   { name: "Inicio", href: "/" },
-  { name: "Personajes", href: "/characters" },
-  { name: "Películas", href: "/movies" },
-  { name: "Naves", href: "/ships" },
+  { name: "Personajes", href: "/people" },
+  { name: "Películas", href: "/films" },
+  { name: "Naves", href: "/starships" },
   { name: "Planetas", href: "/planets" },
 ];
 
@@ -27,7 +27,6 @@ export default function Navbar() {
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="mr-2 md:hidden">
               <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="pr-0">
@@ -45,7 +44,7 @@ export default function Navbar() {
                     "flex text-sm justify-center font-medium transition-colors hover:text-primary",
                     pathname.startsWith(category.href)
                       ? "text-foreground"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground",
                   )}
                 >
                   {category.name}
@@ -60,12 +59,11 @@ export default function Navbar() {
                 "flex items-center text-sm font-medium transition-colors hover:text-primary",
                 pathname === "/compare"
                   ? "text-foreground"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               <Button variant="ghost" size="icon">
                 <Star className="h-5 w-5 dark:text-white text-black" />
-                <span className="sr-only">Compare</span>
               </Button>
             </Link>
             <Link
@@ -74,12 +72,11 @@ export default function Navbar() {
                 "flex items-center text-sm font-medium transition-colors hover:text-primary",
                 pathname === "/favorites"
                   ? "text-foreground"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               <Button variant="ghost" size="icon">
                 <Heart className="h-5 w-5 dark:text-white text-black" />
-                <span className="sr-only">Favorites</span>
               </Button>
             </Link>
             <ModeToggle />
@@ -116,7 +113,9 @@ function MobileNav({
               onClick={() => setOpen(false)}
               className={cn(
                 "flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                pathname.startsWith(category.href) ? "bg-accent" : "transparent"
+                pathname.startsWith(category.href)
+                  ? "bg-accent"
+                  : "transparent",
               )}
             >
               {category.name}
@@ -128,7 +127,7 @@ function MobileNav({
           onClick={() => setOpen(false)}
           className={cn(
             "flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-            pathname === "/favorites" ? "bg-accent" : "transparent"
+            pathname === "/favorites" ? "bg-accent" : "transparent",
           )}
         >
           <Heart className="mr-2 h-4 w-4" />

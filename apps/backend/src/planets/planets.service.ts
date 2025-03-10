@@ -1,17 +1,30 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import type { Planet } from '@repo/shared-types';
 
 @Injectable()
 export class PlanetsService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getPlanets(): Promise<Observable<AxiosResponse<string[]>>> {
+  private extractIdFromUrl(url: string): string {
+    const matches = url.match(/\/([0-9]+)\/$/);
+    return matches ? matches[1] : '';
+  }
+
+  async getPlanets(page = 1): Promise<Planet[]> {
     const response = await firstValueFrom(
-      this.httpService.get('https://swapi.dev/api/planets/'),
+      this.httpService.get(`https://swapi.dev/api/planets/?page=${page}`),
     );
-    return response.data;
+
+    const data = response.data;
+
+    const enhancedResults = data.results.map((planet: any) => ({
+      ...planet,
+      id: this.extractIdFromUrl(planet.url),
+    }));
+
+    return { ...data, results: enhancedResults };
   }
 
   async getPlanetById(id: string) {
@@ -21,7 +34,6 @@ export class PlanetsService {
 
     const planet = response.data;
 
-    // Obtener detalles de personajes que viven en el planeta
     const residentDetails = await Promise.all(
       planet.residents.map(async (residentUrl: string) => {
         const residentResponse = await firstValueFrom(

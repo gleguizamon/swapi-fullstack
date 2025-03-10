@@ -1,17 +1,30 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import type { Starship } from '@repo/shared-types';
 
 @Injectable()
 export class StarshipsService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getStarships(): Promise<Observable<AxiosResponse<string[]>>> {
+  private extractIdFromUrl(url: string): string {
+    const matches = url.match(/\/([0-9]+)\/$/);
+    return matches ? matches[1] : '';
+  }
+
+  async getStarships(page = 1): Promise<Starship[]> {
     const response = await firstValueFrom(
-      this.httpService.get('https://swapi.dev/api/starships/'),
+      this.httpService.get(`https://swapi.dev/api/starships/?page=${page}`),
     );
-    return response.data;
+
+    const data = response.data;
+
+    const enhancedResults = data.results.map((starship: any) => ({
+      ...starship,
+      id: this.extractIdFromUrl(starship.url),
+    }));
+
+    return { ...data, results: enhancedResults };
   }
 
   async getStarshipById(id: string) {
@@ -21,7 +34,6 @@ export class StarshipsService {
 
     const starship = response.data;
 
-    // Obtener detalles de pilotos (personajes)
     const pilotDetails = await Promise.all(
       starship.pilots.map(async (pilotUrl: string) => {
         const pilotResponse = await firstValueFrom(
@@ -31,7 +43,6 @@ export class StarshipsService {
       }),
     );
 
-    // Obtener detalles de películas
     const filmDetails = await Promise.all(
       starship.films.map(async (filmUrl: string) => {
         const filmResponse = await firstValueFrom(

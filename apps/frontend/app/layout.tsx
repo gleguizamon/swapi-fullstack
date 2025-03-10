@@ -1,17 +1,17 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
-import { FavoritesProvider } from "@/components/favorites-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
+import { FavoritesProvider } from "@/context/favorites-context";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Star Wars Explorer",
-  description: "Explore the Star Wars universe",
+  description: "Explorar el universo Star Wars",
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

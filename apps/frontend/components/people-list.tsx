@@ -1,29 +1,29 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { SearchFilter } from "@/components/search-filter";
 import { Pagination } from "@/components/pagination";
 import Link from "next/link";
 import { FavoriteButton } from "@/components/favorite-button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import type { People } from "@repo/shared-types";
 import { includes, propEq, toLower, filter as rFilter } from "ramda";
-import type { Planet } from "@repo/shared-types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 type Props = {
-  planets: Planet[];
+  people: People[];
+  count: number;
   initialPage: number;
   nextPage: string | null;
   previousPage: string | null;
-  count: number;
 };
 
-export default function PlanetsList({
-  planets,
+export default function PeopleList({
+  people,
+  count,
   initialPage,
   nextPage,
   previousPage,
-  count,
 }: Props) {
   const [page, setPage] = useState(initialPage);
   const [filter, setFilter] = useState("all");
@@ -37,25 +37,24 @@ export default function PlanetsList({
 
   const filterOptions = [
     { label: "All", value: "all" },
-    { label: "Arid", value: "arid" },
-    { label: "Temperate", value: "temperate" },
-    { label: "Tropical", value: "tropical" },
-    { label: "Frozen", value: "frozen" },
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+    { label: "Other", value: "n/a" },
   ];
 
-  const filteredPlanets = useMemo(() => {
+  const filteredPeople = useMemo(() => {
     let result =
-      filter === "all" ? planets : rFilter(propEq(filter, "climate"), planets);
+      filter === "all" ? people : rFilter(propEq(filter, "gender"), people);
 
     if (searchQuery.trim() !== "") {
       result = rFilter(
-        (planet) => includes(toLower(searchQuery), toLower(planet.name)),
+        (character) => includes(toLower(searchQuery), toLower(character.name)),
         result,
       );
     }
 
     return result;
-  }, [planets, filter, searchQuery]);
+  }, [people, filter, searchQuery]);
 
   return (
     <div>
@@ -64,46 +63,46 @@ export default function PlanetsList({
           onSearch={setSearchQuery}
           onFilter={setFilter}
           filterOptions={filterOptions}
-          placeholder="Buscar planetas..."
+          placeholder="Buscar personajes..."
         />
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredPlanets.map((planet) => (
+        {filteredPeople.map((character) => (
           <Card
-            key={planet.id}
+            key={character.id}
             className="overflow-hidden transition-all hover:shadow-lg border-l-4 border-l-primary"
           >
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-4">
-                <h2 className="text-xl font-bold">{planet.name}</h2>
+                <h2 className="text-xl font-bold">{character.name}</h2>
                 <FavoriteButton
-                  id={planet.id}
-                  type="planet"
-                  name={planet.name}
+                  id={character.id}
+                  type="character"
+                  name={character.name}
                 />
               </div>
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Climate</span>
-                  {planet.climate}
+                  <span className="font-medium block mb-1">Gender</span>
+                  {character.gender}
                 </div>
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Terrain</span>
-                  {planet.terrain}
+                  <span className="font-medium block mb-1">Birth Year</span>
+                  {character.birth_year}
                 </div>
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Diameter</span>
-                  {planet.diameter}km
+                  <span className="font-medium block mb-1">Height</span>
+                  {character.height}cm
                 </div>
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Population</span>
-                  {planet.population}
+                  <span className="font-medium block mb-1">Mass</span>
+                  {character.mass}kg
                 </div>
               </div>
             </CardContent>
             <CardFooter className="p-4 pt-0">
               <Link
-                href={`/planets/${planet.id}`}
+                href={`/people/${character.id}`}
                 className="text-primary hover:underline"
               >
                 <Button variant="outline" size="sm" className="cursor-pointer">
@@ -118,7 +117,7 @@ export default function PlanetsList({
       <Pagination
         currentPage={page}
         totalPages={totalPages}
-        basePath="/planets"
+        basePath="/people"
         nextPage={nextPage}
         previousPage={previousPage}
       />

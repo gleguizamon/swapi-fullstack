@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 interface FavoriteButtonProps {
   id: string;
-  type: "character" | "movie" | "ship" | "planet";
+  type: "character" | "film" | "starship" | "planet";
   name: string;
   image?: string;
   className?: string;
@@ -27,13 +27,13 @@ export function FavoriteButton({
   const handleToggleFavorite = () => {
     if (isFav) {
       removeFavorite(id, type);
-      toast("Removed from favorites", {
-        description: `${name} has been removed from your favorites.`,
+      toast("Eliminado de favoritos", {
+        description: `${name} fue eliminado de tus favoritos.`,
       });
     } else {
       addFavorite({ id, type, name, image });
-      toast("Added to favorites", {
-        description: `${name} has been added to your favorites.`,
+      toast("Añadido a favoritos", {
+        description: `${name} fue añadido a tus favoritos.`,
       });
     }
   };
@@ -45,13 +45,13 @@ export function FavoriteButton({
       className={cn(className)}
       onClick={handleToggleFavorite}
       aria-label={
-        isFav ? `Remove ${name} from favorites` : `Add ${name} to favorites`
+        isFav ? `Elimiar ${name} de favoritos` : `Añadir ${name} a favoritos`
       }
     >
       <Heart
         className={cn(
           "h-5 w-5 transition-colors",
-          isFav ? "fill-red-500 text-red-500" : "fill-none"
+          isFav ? "fill-red-500 text-red-500" : "fill-none",
         )}
       />
     </Button>

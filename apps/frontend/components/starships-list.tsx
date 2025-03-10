@@ -6,20 +6,20 @@ import Link from "next/link";
 import { FavoriteButton } from "@/components/favorite-button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { includes, propEq, toLower, filter as rFilter } from "ramda";
-import type { Planet } from "@repo/shared-types";
+import type { Starship } from "@repo/shared-types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 type Props = {
-  planets: Planet[];
+  starships: Starship[];
+  count: number;
   initialPage: number;
   nextPage: string | null;
   previousPage: string | null;
-  count: number;
 };
 
-export default function PlanetsList({
-  planets,
+export default function StarshipsList({
+  starships,
   initialPage,
   nextPage,
   previousPage,
@@ -37,25 +37,26 @@ export default function PlanetsList({
 
   const filterOptions = [
     { label: "All", value: "all" },
-    { label: "Arid", value: "arid" },
-    { label: "Temperate", value: "temperate" },
-    { label: "Tropical", value: "tropical" },
-    { label: "Frozen", value: "frozen" },
+    { label: "Starfighter", value: "starfighter" },
+    { label: "Transport", value: "transport" },
+    { label: "Star Destroyer", value: "star destroyer" },
   ];
 
-  const filteredPlanets = useMemo(() => {
+  const filteredStarship = useMemo(() => {
     let result =
-      filter === "all" ? planets : rFilter(propEq(filter, "climate"), planets);
+      filter === "all"
+        ? starships
+        : rFilter(propEq(filter, "starship_class"), starships);
 
     if (searchQuery.trim() !== "") {
       result = rFilter(
-        (planet) => includes(toLower(searchQuery), toLower(planet.name)),
+        (starship) => includes(toLower(searchQuery), toLower(starship.name)),
         result,
       );
     }
 
     return result;
-  }, [planets, filter, searchQuery]);
+  }, [starships, filter, searchQuery]);
 
   return (
     <div>
@@ -64,46 +65,47 @@ export default function PlanetsList({
           onSearch={setSearchQuery}
           onFilter={setFilter}
           filterOptions={filterOptions}
-          placeholder="Buscar planetas..."
+          placeholder="Buscar naves..."
         />
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredPlanets.map((planet) => (
+        {filteredStarship.map((starship) => (
           <Card
-            key={planet.id}
+            key={starship.id}
             className="overflow-hidden transition-all hover:shadow-lg border-l-4 border-l-primary"
           >
             <CardContent className="p-4">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-xl font-bold">{planet.name}</h2>
+              <div className="flex justify-between items-start">
+                <h2 className="text-xl font-bold">{starship.name}</h2>
                 <FavoriteButton
-                  id={planet.id}
-                  type="planet"
-                  name={planet.name}
+                  id={starship.id}
+                  type="starship"
+                  name={starship.name}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <p className="text-sm text-muted-foreground">{starship.model}</p>
+              <div className="grid grid-cols-2 gap-3 text-sm mt-4">
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Climate</span>
-                  {planet.climate}
+                  <span className="font-medium block mb-1">Class</span>
+                  {starship.starship_class}
                 </div>
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Terrain</span>
-                  {planet.terrain}
+                  <span className="font-medium block mb-1">Length</span>
+                  {starship.length}m
                 </div>
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Diameter</span>
-                  {planet.diameter}km
+                  <span className="font-medium block mb-1">Crew</span>
+                  {starship.crew}
                 </div>
                 <div className="p-2 bg-muted rounded">
-                  <span className="font-medium block mb-1">Population</span>
-                  {planet.population}
+                  <span className="font-medium block mb-1">Passengers</span>
+                  {starship.passengers}
                 </div>
               </div>
             </CardContent>
             <CardFooter className="p-4 pt-0">
               <Link
-                href={`/planets/${planet.id}`}
+                href={`/starships/${starship.id}`}
                 className="text-primary hover:underline"
               >
                 <Button variant="outline" size="sm" className="cursor-pointer">
@@ -118,7 +120,7 @@ export default function PlanetsList({
       <Pagination
         currentPage={page}
         totalPages={totalPages}
-        basePath="/planets"
+        basePath="/starships"
         nextPage={nextPage}
         previousPage={previousPage}
       />

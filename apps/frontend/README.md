@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend - Aplicación Next.js
 
-## Getting Started
+## Descripción
 
-First, run the development server:
+Este proyecto es la interfaz de usuario desarrollada con [Next.js](https://nextjs.org).
+
+## Tecnologías Principales
+
+- [Next.js](https://nextjs.org)
+- [React](https://reactjs.org)
+- [TypeScript](https://www.typescriptlang.org)
+- [Tailwind CSS](https://tailwindcss.com)
+
+## Estructura del Proyecto
+
+- `app/` - Directorio principal de la aplicación (App Router de Next.js)
+- `components/` - Componentes reutilizables de React
+- `lib/` - Utilidades y funciones auxiliares
+- `hooks/` - Custom hooks de React
+- `public/` - Archivos estáticos accesibles públicamente
+
+## Requisitos Previos
+
+- Node.js (versión recomendada en `.nvmrc`)
+- Yarn (gestor de paquetes)
+
+## Instalación
+
+Desde la raíz del monorepo, ejecute:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O específicamente para el frontend:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd apps/frontend
+yarn install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Ejecución en Desarrollo
 
-## Learn More
+```bash
+# Desde la raíz del monorepo (ejecuta todas las aplicaciones)
+yarn dev
 
-To learn more about Next.js, take a look at the following resources:
+# O específicamente para el frontend
+cd apps/frontend
+yarn dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Abra [http://localhost:3000](http://localhost:3000) en su navegador para ver la aplicación.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Compilación para Producción
 
-## Deploy on Vercel
+```bash
+# Desde la raíz del monorepo
+yarn build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# O específicamente para el frontend
+cd apps/frontend
+yarn build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Características Principales
+
+- **App Router** - Utiliza el nuevo sistema de enrutamiento de Next.js
+- **Optimización de Fuentes** - Implementa [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) para optimizar y cargar fuentes personalizadas
+- **Integración con Backend** - Comunicación eficiente con la API de NestJS
+- **Componentes Compartidos** - Utiliza componentes y tipos desde los paquetes compartidos del monorepo

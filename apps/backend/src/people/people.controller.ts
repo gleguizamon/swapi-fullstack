@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PeopleService } from './people.service';
 
 @Controller('people')
@@ -6,8 +6,8 @@ export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
   @Get()
-  async getAllPeople() {
-    return this.peopleService.getPeople();
+  async getAllPeople(@Query('page') page: string = '1') {
+    return this.peopleService.getPeople(parseInt(page));
   }
 
   @Get(':id')

@@ -1,17 +1,30 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import type { People } from '@repo/shared-types';
 
 @Injectable()
 export class PeopleService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getPeople(): Promise<Observable<AxiosResponse<string[]>>> {
+  private extractIdFromUrl(url: string): string {
+    const matches = url.match(/\/([0-9]+)\/$/);
+    return matches ? matches[1] : '';
+  }
+
+  async getPeople(page = 1): Promise<People[]> {
     const response = await firstValueFrom(
-      this.httpService.get('https://swapi.dev/api/people/'),
+      this.httpService.get(`https://swapi.dev/api/people/?page=${page}`),
     );
-    return response.data;
+
+    const data = response.data;
+
+    const enhancedResults = data.results.map((character) => ({
+      ...character,
+      id: this.extractIdFromUrl(character.url),
+    }));
+
+    return { ...data, results: enhancedResults };
   }
 
   async getPersonById(id: string) {
@@ -21,7 +34,6 @@ export class PeopleService {
 
     const person = response.data;
 
-    // Obtener detalles de películas
     const filmDetails = await Promise.all(
       person.films.map(async (filmUrl: string) => {
         const filmResponse = await firstValueFrom(
@@ -31,7 +43,6 @@ export class PeopleService {
       }),
     );
 
-    // Obtener detalles de naves
     const starshipDetails = await Promise.all(
       person.starships.map(async (starshipUrl: string) => {
         const starshipResponse = await firstValueFrom(
@@ -41,7 +52,6 @@ export class PeopleService {
       }),
     );
 
-    // Obtener detalles del planeta de origen
     let homeworldDetails = null;
     if (person.homeworld) {
       const homeworldResponse = await firstValueFrom(

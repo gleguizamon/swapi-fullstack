@@ -44,7 +44,7 @@ export function SearchFilter({
         <Input
           placeholder={placeholder}
           value={query}
-          onChange={handleChange} // 🔄 Actualiza mientras escribe
+          onChange={handleChange}
           className="pr-10"
         />
         {query && (
@@ -55,14 +55,13 @@ export function SearchFilter({
             onClick={handleClear}
           >
             <X className="h-4 w-4" />
-            <span className="sr-only">Clear search</span>
           </Button>
         )}
         <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
       </div>
       <Select onValueChange={onFilter}>
         <SelectTrigger className="w-full sm:w-[180px]">
-          <SelectValue placeholder="Filter by" />
+          <SelectValue placeholder="Filtrar por" />
         </SelectTrigger>
         <SelectContent>
           {filterOptions.map((option) => (

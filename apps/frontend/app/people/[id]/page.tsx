@@ -1,18 +1,18 @@
-import { getPlanetById } from "@/lib/api";
+import { getPeopleById } from "@/lib/api";
 import Link from "next/link";
 import { FavoriteButton } from "@/components/favorite-button";
-import { Button } from "../../../components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Film, Car, Rocket } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 
-export default async function PlanetPage({
+export default async function CharacterPage({
   params,
 }: {
   params: { id: string };
 }) {
   try {
-    const planet = await getPlanetById(params.id);
+    const character = await getPeopleById(params.id);
 
     return (
       <div className="container max-w-6xl mx-auto px-4 py-8 animate-in fade-in duration-500">
@@ -21,9 +21,9 @@ export default async function PlanetPage({
           variant="ghost"
           className="mb-6 hover:bg-primary/10 transition-colors"
         >
-          <Link href="/planets" className="flex items-center">
+          <Link href="/people" className="flex items-center">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver a Planetas
+            Volver a Personajes
           </Link>
         </Button>
 
@@ -31,14 +31,14 @@ export default async function PlanetPage({
           <div className="space-y-6">
             <Card className="overflow-hidden border-primary/20 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
               <CardContent className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-                    {planet.name}
+                <div className="flex justify-between items-start mb-6">
+                  <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+                    {character.name}
                   </h1>
                   <FavoriteButton
-                    id={planet.id}
-                    type="planet"
-                    name={planet.name}
+                    id={character.id}
+                    type="character"
+                    name={character.name}
                   />
                 </div>
               </CardContent>
@@ -46,48 +46,44 @@ export default async function PlanetPage({
 
             <Card className="overflow-hidden border-primary/20 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
               <CardContent className="p-6">
-                <h2 className="text-2xl font-semibold mb-4">Planet Details</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Climate
-                    </h3>
-                    <p className="font-semibold text-lg">{planet.climate}</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Terrain
-                    </h3>
-                    <p className="font-semibold text-lg">{planet.terrain}</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Diameter
-                    </h3>
-                    <p className="font-semibold text-lg">{planet.diameter}km</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Gravity
-                    </h3>
-                    <p className="font-semibold text-lg">{planet.gravity}</p>
-                  </div>
+                <h2 className="text-2xl font-semibold mb-4 flex items-center">
+                  <Film className="mr-2 h-5 w-5 text-primary" />
+                  Films
+                </h2>
+                <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
+                  <p className="text-lg">
+                    Appears in{" "}
+                    <span className="font-bold text-primary">
+                      {character.films.length}
+                    </span>{" "}
+                    film
+                    {character.films.length !== 1 ? "s" : ""}
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card className="overflow-hidden border-primary/20 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-3">Films</h3>
+                  <h2 className="text-xl font-semibold mb-4 flex items-center">
+                    <Car className="mr-2 h-5 w-5 text-primary" />
+                    Vehicles
+                  </h2>
                   <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
                     <p className="text-lg">
-                      Appears in{" "}
-                      <span className="font-bold text-primary">
-                        {planet.films.length}
-                      </span>{" "}
-                      film
-                      {planet.films.length !== 1 ? "s" : ""}
+                      {character.vehicles.length > 0 ? (
+                        <>
+                          Piloted{" "}
+                          <span className="font-bold text-primary">
+                            {character.vehicles.length}
+                          </span>{" "}
+                          vehicle
+                          {character.vehicles.length !== 1 ? "s" : ""}
+                        </>
+                      ) : (
+                        "No vehicles piloted"
+                      )}
                     </p>
                   </div>
                 </CardContent>
@@ -95,20 +91,23 @@ export default async function PlanetPage({
 
               <Card className="overflow-hidden border-primary/20 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-3">Residents</h3>
+                  <h2 className="text-xl font-semibold mb-4 flex items-center">
+                    <Rocket className="mr-2 h-5 w-5 text-primary" />
+                    Starships
+                  </h2>
                   <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
                     <p className="text-lg">
-                      {planet.residents.length > 0 ? (
+                      {character.starships.length > 0 ? (
                         <>
-                          Home to{" "}
+                          Piloted{" "}
                           <span className="font-bold text-primary">
-                            {planet.residents.length}
+                            {character.starships.length}
                           </span>{" "}
-                          character
-                          {planet.residents.length !== 1 ? "s" : ""}
+                          starship
+                          {character.starships.length !== 1 ? "s" : ""}
                         </>
                       ) : (
-                        "No known residents"
+                        "No starships piloted"
                       )}
                     </p>
                   </div>
@@ -121,42 +120,67 @@ export default async function PlanetPage({
             <Card className="overflow-hidden border-primary/20 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
               <CardContent className="p-6">
                 <h2 className="text-2xl font-semibold mb-6 border-b pb-2">
-                  Additional Information
+                  Character Details
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
                     <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Rotation Period
+                      Gender
+                    </h3>
+                    <p className="font-semibold text-lg">{character.gender}</p>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
+                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                      Birth Year
                     </h3>
                     <p className="font-semibold text-lg">
-                      {planet.rotation_period} hours
+                      {character.birth_year}
                     </p>
                   </div>
 
                   <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
                     <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Orbital Period
+                      Height
                     </h3>
                     <p className="font-semibold text-lg">
-                      {planet.orbital_period} days
+                      {character.height}cm
                     </p>
                   </div>
 
                   <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
                     <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Surface Water
+                      Mass
+                    </h3>
+                    <p className="font-semibold text-lg">{character.mass}kg</p>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
+                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                      Hair Color
                     </h3>
                     <p className="font-semibold text-lg">
-                      {planet.surface_water}%
+                      {character.hair_color}
                     </p>
                   </div>
 
                   <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
                     <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                      Population
+                      Eye Color
                     </h3>
-                    <p className="font-semibold text-lg">{planet.population}</p>
+                    <p className="font-semibold text-lg">
+                      {character.eye_color}
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
+                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                      Skin Color
+                    </h3>
+                    <p className="font-semibold text-lg">
+                      {character.skin_color}
+                    </p>
                   </div>
                 </div>
               </CardContent>
