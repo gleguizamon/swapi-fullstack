@@ -9,6 +9,7 @@ import type { People } from "@repo/shared-types";
 import { includes, propEq, toLower, filter as rFilter } from "ramda";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { extractIdFromUrl } from "@/utils/extractIdFromUrl";
 
 type Props = {
   people: People[];
@@ -69,14 +70,14 @@ export default function PeopleList({
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredPeople.map((character) => (
           <Card
-            key={character.id}
+            key={extractIdFromUrl(character.url)}
             className="overflow-hidden transition-all hover:shadow-lg border-l-4 border-l-primary"
           >
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-xl font-bold">{character.name}</h2>
                 <FavoriteButton
-                  id={character.id}
+                  id={extractIdFromUrl(character.url)}
                   type="character"
                   name={character.name}
                 />
@@ -102,7 +103,7 @@ export default function PeopleList({
             </CardContent>
             <CardFooter className="p-4 pt-0">
               <Link
-                href={`/people/${character.id}`}
+                href={`/people/${extractIdFromUrl(character.url)}`}
                 className="text-primary hover:underline"
               >
                 <Button variant="outline" size="sm" className="cursor-pointer">

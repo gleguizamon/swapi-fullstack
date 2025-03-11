@@ -5,7 +5,7 @@ import { Pagination } from "@/components/pagination";
 import Link from "next/link";
 import { FavoriteButton } from "@/components/favorite-button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { filter as rFilter, propEq, includes, toLower } from "ramda";
+import { filter as rFilter, propEq, includes, toLower, toString } from "ramda";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import type { Film } from "@repo/shared-types";
@@ -65,7 +65,7 @@ export default function FilmsList({ films, nextPage, previousPage }: Props) {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredFilms.map((film) => (
           <Card
-            key={film.id}
+            key={film.episode_id}
             className="transition-all hover:shadow-lg border-l-4 border-l-primary"
           >
             <CardContent className="p-6">
@@ -86,14 +86,18 @@ export default function FilmsList({ films, nextPage, previousPage }: Props) {
             </CardContent>
             <CardFooter className="px-6 pb-6 pt-0 flex justify-between items-center">
               <Link
-                href={`/films/${film.id}`}
+                href={`/films/${film.episode_id}`}
                 className="text-primary hover:underline"
               >
                 <Button variant="outline" size="sm" className="cursor-pointer">
                   Ver detalles <ArrowRight />
                 </Button>
               </Link>
-              <FavoriteButton id={film.id} type="film" name={film.title} />
+              <FavoriteButton
+                id={toString(film.episode_id)}
+                type="film"
+                name={film.title}
+              />
             </CardFooter>
           </Card>
         ))}

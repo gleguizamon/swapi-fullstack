@@ -2,33 +2,21 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import type { Film } from '@repo/shared-types';
+import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class FilmsService {
   constructor(private readonly httpService: HttpService) {}
 
-  private extractIdFromUrl(url: string): string {
-    const matches = url.match(/\/([0-9]+)\/$/);
-    return matches ? matches[1] : '';
-  }
-
   async getFilms(page = 1): Promise<Film[]> {
-    const response = await firstValueFrom(
+    const response: AxiosResponse<Film[]> = await firstValueFrom(
       this.httpService.get(`https://swapi.dev/api/films/?page=${page}`),
     );
-
-    const data = response.data;
-
-    const enhancedResults = data.results.map((movie) => ({
-      ...movie,
-      id: this.extractIdFromUrl(movie.url),
-    }));
-
-    return { ...data, results: enhancedResults };
+    return response.data;
   }
 
-  async getFilmById(id: string) {
-    const response = await firstValueFrom(
+  async getFilmById(id: string): Promise<Film> {
+    const response: AxiosResponse<Film> = await firstValueFrom(
       this.httpService.get(`https://swapi.dev/api/films/${id}/`),
     );
 

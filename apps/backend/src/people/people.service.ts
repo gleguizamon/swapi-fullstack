@@ -2,33 +2,21 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import type { People } from '@repo/shared-types';
+import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class PeopleService {
   constructor(private readonly httpService: HttpService) {}
 
-  private extractIdFromUrl(url: string): string {
-    const matches = url.match(/\/([0-9]+)\/$/);
-    return matches ? matches[1] : '';
-  }
-
   async getPeople(page = 1): Promise<People[]> {
-    const response = await firstValueFrom(
+    const response: AxiosResponse<People[]> = await firstValueFrom(
       this.httpService.get(`https://swapi.dev/api/people/?page=${page}`),
     );
-
-    const data = response.data;
-
-    const enhancedResults = data.results.map((character) => ({
-      ...character,
-      id: this.extractIdFromUrl(character.url),
-    }));
-
-    return { ...data, results: enhancedResults };
+    return response.data;
   }
 
-  async getPersonById(id: string) {
-    const response = await firstValueFrom(
+  async getPersonById(id: string): Promise<People> {
+    const response: AxiosResponse<People> = await firstValueFrom(
       this.httpService.get(`https://swapi.dev/api/people/${id}/`),
     );
 
@@ -52,7 +40,7 @@ export class PeopleService {
       }),
     );
 
-    let homeworldDetails = null;
+    let homeworldDetails = '';
     if (person.homeworld) {
       const homeworldResponse = await firstValueFrom(
         this.httpService.get(person.homeworld),

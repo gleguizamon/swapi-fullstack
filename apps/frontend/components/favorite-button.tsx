@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
-import { useFavorites } from "@/components/favorites-provider";
+import { useFavorites } from "@/context/favorites";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 

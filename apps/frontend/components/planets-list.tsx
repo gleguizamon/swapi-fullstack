@@ -9,6 +9,7 @@ import { includes, propEq, toLower, filter as rFilter } from "ramda";
 import type { Planet } from "@repo/shared-types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { extractIdFromUrl } from "@/utils/extractIdFromUrl";
 
 type Props = {
   planets: Planet[];
@@ -70,14 +71,14 @@ export default function PlanetsList({
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredPlanets.map((planet) => (
           <Card
-            key={planet.id}
+            key={extractIdFromUrl(planet.url)}
             className="overflow-hidden transition-all hover:shadow-lg border-l-4 border-l-primary"
           >
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-xl font-bold">{planet.name}</h2>
                 <FavoriteButton
-                  id={planet.id}
+                  id={extractIdFromUrl(planet.url)}
                   type="planet"
                   name={planet.name}
                 />
@@ -103,7 +104,7 @@ export default function PlanetsList({
             </CardContent>
             <CardFooter className="p-4 pt-0">
               <Link
-                href={`/planets/${planet.id}`}
+                href={`/planets/${extractIdFromUrl(planet.url)}`}
                 className="text-primary hover:underline"
               >
                 <Button variant="outline" size="sm" className="cursor-pointer">

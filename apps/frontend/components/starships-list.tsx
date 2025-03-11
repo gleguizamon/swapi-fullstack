@@ -9,6 +9,7 @@ import { includes, propEq, toLower, filter as rFilter } from "ramda";
 import type { Starship } from "@repo/shared-types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { extractIdFromUrl } from "@/utils/extractIdFromUrl";
 
 type Props = {
   starships: Starship[];
@@ -71,14 +72,14 @@ export default function StarshipsList({
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredStarship.map((starship) => (
           <Card
-            key={starship.id}
+            key={extractIdFromUrl(starship.url)}
             className="overflow-hidden transition-all hover:shadow-lg border-l-4 border-l-primary"
           >
             <CardContent className="p-4">
               <div className="flex justify-between items-start">
                 <h2 className="text-xl font-bold">{starship.name}</h2>
                 <FavoriteButton
-                  id={starship.id}
+                  id={extractIdFromUrl(starship.url)}
                   type="starship"
                   name={starship.name}
                 />
@@ -105,7 +106,7 @@ export default function StarshipsList({
             </CardContent>
             <CardFooter className="p-4 pt-0">
               <Link
-                href={`/starships/${starship.id}`}
+                href={`/starships/${extractIdFromUrl(starship.url)}`}
                 className="text-primary hover:underline"
               >
                 <Button variant="outline" size="sm" className="cursor-pointer">

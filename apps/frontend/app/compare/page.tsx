@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import { X } from "lucide-react";
-import { useFavorites } from "@/components/favorites-provider";
+import { useFavorites } from "@/context/favorites";
 
 export default function ComparePage() {
   const { favorites } = useFavorites();

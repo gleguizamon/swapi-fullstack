@@ -2,33 +2,21 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import type { Starship } from '@repo/shared-types';
+import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class StarshipsService {
   constructor(private readonly httpService: HttpService) {}
 
-  private extractIdFromUrl(url: string): string {
-    const matches = url.match(/\/([0-9]+)\/$/);
-    return matches ? matches[1] : '';
-  }
-
   async getStarships(page = 1): Promise<Starship[]> {
-    const response = await firstValueFrom(
+    const response: AxiosResponse<Starship[]> = await firstValueFrom(
       this.httpService.get(`https://swapi.dev/api/starships/?page=${page}`),
     );
-
-    const data = response.data;
-
-    const enhancedResults = data.results.map((starship: any) => ({
-      ...starship,
-      id: this.extractIdFromUrl(starship.url),
-    }));
-
-    return { ...data, results: enhancedResults };
+    return response.data;
   }
 
-  async getStarshipById(id: string) {
-    const response = await firstValueFrom(
+  async getStarshipById(id: string): Promise<Starship> {
+    const response: AxiosResponse<Starship> = await firstValueFrom(
       this.httpService.get(`https://swapi.dev/api/starships/${id}/`),
     );
 

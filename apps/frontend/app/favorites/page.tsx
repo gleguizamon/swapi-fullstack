@@ -1,11 +1,11 @@
 "use client";
-import { useFavorites } from "@/components/favorites-provider";
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import { ArrowRight, Film, Globe, Rocket, Trash2, Users } from "lucide-react";
-import { useState } from "react";
+import { useFavorites } from "@/context/favorites";
 import {
   AlertDialog,
   AlertDialogAction,
